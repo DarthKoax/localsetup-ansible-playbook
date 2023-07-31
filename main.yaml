@@ -1,0 +1,25 @@
+---
+- name: Setup local development environment
+  hosts: all
+  gather_facts: yes
+  roles:
+  - role: geerlingguy.dotfiles
+    tags: ['dotfiles']
+  - role: darthkoax.installation
+    tags: ['applications_installation']
+    become: yes
+  - role: fubarhouse.golang
+    tags: ['fubarhouse.golang']
+    become: yes
+    when: deploy_golang
+  - role: darthkoax.container_runtime
+    tags: ['container_runtime']
+    become: yes
+    when: deploy_container_runtime
+
+  
+  tasks:
+  - name: Debug
+    debug:
+      msg: "DISTRO: {{ ansible_os_family }}"
+...

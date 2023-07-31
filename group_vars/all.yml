@@ -1,0 +1,58 @@
+---
+downloads: ~/.ansible-downloads/
+
+configure_dotfiles: true
+configure_terminal: true
+
+configure_sudoers: false
+sudoers_custom_config: ''
+# Example:
+# sudoers_custom_config: |
+#   # Allow users in admin group to use sudo with no password.
+#   %admin ALL=(ALL) NOPASSWD: ALL
+
+dotfiles_repo: git@github.com:DarthKoax/.dotfiles.git
+dotfiles_repo_accept_hostkey: true
+dotfiles_repo_version: main
+dotfiles_repo_local_destination: ~/dotfiles
+dotfiles_files:
+  - .bashrc
+  - .tmux.conf
+  - .vimrc
+  - .bash_aliases
+  - .gitconfig
+  - .bash_secrets.sample
+  - .bash_shell_colors.sh
+
+applications: 
+ - tmux
+ - git
+ - wget
+ - htop
+ - python3
+ - tmux-autocomplete
+ - bash-completion
+ - make 
+ - gcc 
+ - findutils
+ - rsync
+ - tar
+ - fzf
+
+deploy_container_runtime: false
+deploy_golang: false
+
+
+pip_packages: 
+  - name: pywinrm
+    state: present
+# - name: mkdocs
+#   state: present # present/absent/latest, default: present
+#   version: "0.16.3" # default: N/A
+
+
+go_install_clean: true
+go_version: 1.20.6
+go_uninstall: false
+go_custom_mirror: https://storage.googleapis.com/golang
+go_temporary_dir: /tmp

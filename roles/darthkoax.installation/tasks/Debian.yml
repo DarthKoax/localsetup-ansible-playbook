@@ -1,0 +1,10 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install applications on Debian
+  apt:
+    name: "{{applications}}"
+    state: present

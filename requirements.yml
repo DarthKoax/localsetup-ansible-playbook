@@ -1,0 +1,7 @@
+---
+roles:
+  - name: geerlingguy.dotfiles
+  - name: fubarhouse.golang
+    src:  https://github.com/fubarhouse/ansible-role-golang/archive/refs/tags/2.10.0.tar.gz
+    
+    
