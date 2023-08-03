@@ -6,3 +6,9 @@ ansible-galaxy install gantsign.golang
 ```
 
 `ansible-galaxy install -r requirements.yml`
+
+
+## Run me
+```
+ansible-playbook -i inventory main.yaml --ask-become
+```
