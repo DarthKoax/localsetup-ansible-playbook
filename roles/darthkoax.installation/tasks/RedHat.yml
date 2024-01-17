@@ -1,0 +1,10 @@
+---
+- name: Update apt cache
+  yum:
+    update_cache: yes
+  become: yes
+
+- name: Install applications on Redhat
+  yum:
+    name: "{{applications}}"
+    state: present

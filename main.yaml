@@ -2,6 +2,7 @@
 - name: Setup local development environment
   hosts: all
   gather_facts: yes
+  connection: local
   roles:
   - role: geerlingguy.dotfiles
     tags: ['dotfiles']

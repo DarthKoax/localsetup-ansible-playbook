@@ -30,17 +30,17 @@ applications:
  - wget
  - htop
  - python3
- - tmux-autocomplete
+#  - tmux-autocomplete
  - bash-completion
  - make 
  - gcc 
  - findutils
  - rsync
  - tar
- - fzf
+#  - fzf
 
 deploy_container_runtime: false
-deploy_golang: false
+deploy_golang: true
 
 
 pip_packages: 
