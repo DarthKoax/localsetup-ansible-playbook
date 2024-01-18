@@ -4,3 +4,7 @@
 #     msg: "./roles/darthkoax.installation/tasks/{{ ansible_os_family }}.yml"
 - name: Include OS-specific tasks
   include_tasks: "{{ ansible_os_family }}.yml"
+
+- name: Install in fzf for Airgapped env
+  include_tasks: "fzf.yml"
+

@@ -1,3 +1,13 @@
 ---
 applications: 
  - curl
+
+
+fzf_repo: "git@github.com:junegunn/fzf.git"
+fzf_binary: https://github.com/junegunn/fzf/releases/download/0.45.0/fzf-0.45.0-linux_amd64.tar.gz
+fzf_scripts: 
+ - key-bindings.bash
+ - completion.bash 
+fzf_additional_bins: 
+ - fzf-tmux
+fzf_bin_destination: /usr/local/bin

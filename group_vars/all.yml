@@ -40,7 +40,7 @@ applications:
 #  - fzf
 
 deploy_container_runtime: false
-deploy_golang: true
+deploy_golang: false
 
 
 pip_packages: 

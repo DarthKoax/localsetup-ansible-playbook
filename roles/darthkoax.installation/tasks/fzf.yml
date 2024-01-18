@@ -1,0 +1,46 @@
+---
+- name: "Git clone fzf"
+  git:
+    repo: "{{ fzf_repo }}"
+    dest: /tmp/fzf-git
+  become: false
+
+- name: make fzf dir
+  ansible.builtin.file:
+    path: ~/.config/fzf/
+    state: directory
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_id}}"
+
+- name: Copy fzf scripts to .config
+  ansible.builtin.copy:
+    src: /tmp/fzf-git/shell/{{item}}
+    dest: ~/.config//fzf/{{item}}
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_id}}"
+  with_items: "{{fzf_scripts}}"
+
+- name: "Copy fzf-tmux to {{fzf_bin_destination}}"
+  ansible.builtin.copy:
+    src: /tmp/fzf-git/bin/{{item}}
+    dest: "{{fzf_bin_destination}}"
+    owner: "root"
+    group: "root"
+    mode: '0755'
+  with_items: "{{fzf_additional_bins}}"
+
+- name: Download fzf tarball
+  ansible.builtin.get_url:
+    url: https://github.com/junegunn/fzf/releases/download/0.45.0/fzf-0.45.0-linux_amd64.tar.gz
+    dest: /tmp/fzf-0.45.0-linux_amd64.tar.gz
+    mode: '0755'
+
+- name: Extract fzf tarball to /usr/local/bin
+  ansible.builtin.unarchive:
+    src: "/tmp/fzf-0.45.0-linux_amd64.tar.gz"
+    dest: "{{fzf_bin_destination}}"
+    owner: "root"
+    group: "root"
+    mode: '0755'
+  
+  
