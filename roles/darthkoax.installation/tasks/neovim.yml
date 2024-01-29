@@ -1,0 +1,130 @@
+---
+# tasks file for neovim_install
+
+- name: Download Neovim appimage from Artifactory
+  ansible.builtin.get_url:
+    url: "{{neovim_appimage_url}}{{neovim_binary_name}}"
+    dest: "/tmp"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Move and rename Neovim appimage to /usr/bin/nvim
+  ansible.builtin.copy:
+    src: "/tmp/{{ neovim_binary_name }}"
+    dest: "/usr/bin/nvim"
+    remote_src: true
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Clone Lazy.nvim repository
+  git:
+    repo: 'https://github.com/folke/lazy.nvim.git'
+    dest: ~/.config/nvim
+    version: main
+
+- name: Install packer.nvim
+  git:
+    repo: 'https://github.com/wbthomason/packer.nvim.git'
+    dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+    version: main
+    depth: 1
+
+- name: Set up Neovim configuration
+  ansible.builtin.template:
+    src: "init.vim.j2"
+    dest: "~/.config/nvim/init.vim"
+
+
+# - name: Run Neovim to install plugins
+#   shell: nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+#   args:
+#     executable: /bin/bash
+
+
+# - name: Install applications on Redhat
+#   yum:
+#     name: "{{item}}"
+#     state: present
+#   when: ansible_os_family == 'RedHat'
+#   with_items: "{{neovim_dependencies}}"
+
+# - name: Install applications on Debian
+#   apt:
+#     name: "{{item}}"
+#     state: present
+#   when: ansible_os_family == 'Debian'
+#   with_items: "{{neovim_dependencies}}"
+
+# - name: Clone LazyVim repository
+#   ansible.builtin.git:
+#     repo: "{{ lazyvim_repo }}"
+#     dest: "{{ config_neovim_dir }}"
+#     clone: yes
+#     update: yes
+
+# - name: Replace a specific string in mason.lua
+#   ansible.builtin.replace:
+#     path: /root/.config/nvim/lua/lvim/core/mason.lua
+#     regexp: 'https://github.com/%s/releases/download/%s/%s'
+#     replace: "{{luavim_mason_download_url}}"
+
+
+# - name: Install LazyVim
+#   ansible.builtin.command:
+#     cmd: "{{ config_neovim_dir }}/utils/installer/install.sh"
+#     chdir: "{{ config_neovim_dir }}"
+#   args:
+#     creates: "{{ config_neovim_dir }}/nvim/config.lua"
+
+
+
+# - name: Set up Neovim configuration (if any custom configuration needed)
+#   ansible.builtin.template:
+#     src: "custom_config.lua.j2"
+#     dest: "{{ config_neovim_dir }}/lvim/config.lua"
+
+
+# - name: Ensure vim-plug directory exists
+#   ansible.builtin.file:
+#     path: "{{ vim_plug_dest_dir }}"
+#     state: directory
+#     mode: '0755'
+
+# - name: Install vim-plug
+#   ansible.builtin.get_url:
+#     url: "{{ vim_plug_url }}"
+#     dest: "{{ vim_plug_dest }}"
+#     mode: '0644'
+
+
+# - name: Ensure Neovim plugin directory exists
+#   ansible.builtin.file:
+#     path: "{{ item.dest | dirname }}"
+#     state: directory
+#     mode: '0755'
+#   loop: "{{ neovim_plugins }}"
+
+# - name: Install Neovim plugins
+#   ansible.builtin.git:
+#     repo: "{{ item.repo }}"
+#     dest: "{{ item.dest }}"
+#     clone: yes
+#     update: yes
+#   loop: "{{ neovim_plugins }}"
+
+# - name: Set up Neovim configuration
+#   ansible.builtin.template:
+#     src: "init.vim.j2"
+#     dest: "~/.config/nvim/init.vim"
+
+
+# - name: Install Neovim plugins
+#   ansible.builtin.command:
+#     cmd: "nvim --headless +PlugInstall +qall"
+#   environment:
+#     XDG_CONFIG_HOME: "{{ ansible_env.HOME }}/.config"
+
+
+

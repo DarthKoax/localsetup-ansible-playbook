@@ -11,3 +11,29 @@ fzf_scripts:
 fzf_additional_bins: 
  - fzf-tmux
 fzf_bin_destination: /usr/local/bin
+
+neovim_appimage_url: https://github.com/neovim/neovim/releases/download/v0.9.5/
+neovim_binary_name: nvim.appimage
+local_neovim_dir: ~/.local/share/nvim
+config_neovim_dir: ~/.config/nvim
+
+neovim_dependencies: 
+
+  - fuse 
+  - fuse-libs
+
+
+neovim_plugins:
+  - name: "Comment.nvim"
+    repo: "https://github.com/numToStr/Comment.nvim.git"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/plugins/start/Comment.nvim"
+  - name: "neo-tree"
+    repo: "https://github.com/nvim-neo-tree/neo-tree.nvim.git"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/plugins/start/neo-tree"
+  - name: "plenary.nvim"
+    repo: "https://github.com/nvim-lua/plenary.nvim.git"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/plugins/start/plenary.nvim"
+  - name: "nui.nvim"
+    repo: "https://github.com/MunifTanjim/nui.nvim.git"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/plugins/start/nui.nvim"
+
