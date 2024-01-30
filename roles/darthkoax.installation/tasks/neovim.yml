@@ -18,6 +18,14 @@
     owner: "{{ansible_user_id}}"
     group: "{{ansible_user_id}}"
 
+- name: Create ~/.config/nvim/after/plugin
+  ansible.builtin.file:
+    path: "~/.config/nvim/after/plugin/"
+    state: directory
+    mode: '0755'
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_id}}"
+
 - name: "Create ~/.config/nvim/lua/{{nvim_custom_project}}"
   ansible.builtin.file:
     path: "~/.config/nvim/lua/{{nvim_custom_project}}"
@@ -59,6 +67,18 @@
   template:
     src: "{{ item.path }}"
     dest: "~/.config/nvim/lua/{{nvim_custom_project}}/{{ item.path | basename | regex_replace('.j2','')}}"
+  loop: "{{ templates_to_process.files }}"
+
+- name: Find templates in a specific directory
+  find:
+    paths: "{{role_path}}/templates/after/"
+    patterns: "*.j2"
+  register: templates_to_process
+
+- name: Process each template
+  template:
+    src: "{{ item.path }}"
+    dest: "~/.config/nvim/after/plugin/{{ item.path | basename | regex_replace('.j2','')}}"
   loop: "{{ templates_to_process.files }}"
 
 # - name: Set up init.lua {{nvim_custom_project}}
