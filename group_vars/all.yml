@@ -3,6 +3,7 @@ downloads: ~/.ansible-downloads/
 
 configure_dotfiles: true
 configure_terminal: true
+install_neovim: true
 
 configure_sudoers: false
 sudoers_custom_config: ''

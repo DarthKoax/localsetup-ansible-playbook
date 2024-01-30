@@ -1,5 +1,30 @@
 ---
-# tasks file for neovim_install
+# # tasks file for neovim_install
+# - name: Install and config neovim
+#   tag: neovim
+- name: Create ~/.config/nvim
+  ansible.builtin.file:
+    path: "~/.config/nvim"
+    state: directory
+    mode: '0755'
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_id}}"
+
+- name: Create ~/.config/nvim/lua
+  ansible.builtin.file:
+    path: "~/.config/nvim/lua/"
+    state: directory
+    mode: '0755'
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_id}}"
+
+- name: "Create ~/.config/nvim/lua/{{nvim_custom_project}}"
+  ansible.builtin.file:
+    path: "~/.config/nvim/lua/{{nvim_custom_project}}"
+    state: directory
+    mode: '0755'
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_id}}"
 
 - name: Download Neovim appimage from Artifactory
   ansible.builtin.get_url:
@@ -18,23 +43,56 @@
     owner: root
     group: root
 
-- name: Clone Lazy.nvim repository
-  git:
-    repo: 'https://github.com/folke/lazy.nvim.git'
-    dest: ~/.config/nvim
-    version: main
-
-- name: Install packer.nvim
-  git:
-    repo: 'https://github.com/wbthomason/packer.nvim.git'
-    dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-    version: main
-    depth: 1
-
-- name: Set up Neovim configuration
+- name: Set up init.lua
   ansible.builtin.template:
-    src: "init.vim.j2"
-    dest: "~/.config/nvim/init.vim"
+    src: "init.lua.j2"
+    dest: "~/.config/nvim/init.lua"
+
+
+- name: Find templates in a specific directory
+  find:
+    paths: "{{role_path}}/templates/lua/{{nvim_custom_project}}/"
+    patterns: "*.j2"
+  register: templates_to_process
+
+- name: Process each template
+  template:
+    src: "{{ item.path }}"
+    dest: "~/.config/nvim/lua/{{nvim_custom_project}}/{{ item.path | basename | regex_replace('.j2','')}}"
+  loop: "{{ templates_to_process.files }}"
+
+# - name: Set up init.lua {{nvim_custom_project}}
+#   ansible.builtin.template:
+#     src: "lua/{{nvim_custom_project}}/init.lua.j2"
+#     dest: "~/.config/nvim/lua/{{nvim_custom_project}}/init.lua"
+
+# - name: Set up init.lua {{nvim_custom_project}}
+#   ansible.builtin.template:
+#     src: "lua/{{nvim_custom_project}}/remap.lua.j2"
+#     dest: "~/.config/nvim/lua/{{nvim_custom_project}}/remap.lua"
+
+# - name: Set up Packer
+#   ansible.builtin.template:
+#     src: "packer.lua.j2"
+#     dest: "~/.config/nvim/init.vim"
+
+# - name: Clone Lazy.nvim repository
+#   git:
+#     repo: 'https://github.com/folke/lazy.nvim.git'
+#     dest: ~/.config/nvim
+#     version: main
+
+# - name: Install packer.nvim
+#   git:
+#     repo: 'https://github.com/wbthomason/packer.nvim.git'
+#     dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+#     version: main
+#     depth: 1
+
+# - name: Set up Neovim configuration
+#   ansible.builtin.template:
+#     src: "init.vim.j2"
+#     dest: "~/.config/nvim/init.vim"
 
 
 # - name: Run Neovim to install plugins

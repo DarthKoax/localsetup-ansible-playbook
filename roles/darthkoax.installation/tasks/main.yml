@@ -10,4 +10,5 @@
 
 - name: Install in neovim for Airgapped env
   include_tasks: "neovim.yml"
+  when: install_neovim
 
