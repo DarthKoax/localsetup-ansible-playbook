@@ -53,4 +53,27 @@ nvim_lazy_plugins_install: |
     dependencies = { 
       'https://github.com/nvim-lua/plenary.nvim.git' 
     }
+  },
+  { 
+    'https://github.com/catppuccin/nvim.git', 
+    name = "catppuccin", 
+    priority = 1000 
+  },
+  {
+  "https://github.com/folke/noice.nvim.git",
+  event = "VeryLazy",
+  opts = {
+    -- add any options here
+  },
+  dependencies = {
+    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+    "https://github.com/MunifTanjim/nui.nvim.git",
+    -- OPTIONAL:
+    "https://github.com/rcarriga/nvim-notify.git",
+  }
+  },
+  {
+    'https://github.com/akinsho/bufferline.nvim.git', 
+    version = "*", 
+    dependencies = 'https://github.com/nvim-tree/nvim-web-devicons.git'
   }
