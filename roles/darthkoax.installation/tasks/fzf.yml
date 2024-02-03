@@ -10,7 +10,8 @@
     path: ~/.config/fzf/
     state: directory
     owner: "{{ansible_user_id}}"
-    group: "{{ansible_user_id}}"
+    mode: '0755'
+    
 
 - name: Copy fzf scripts to .config
   ansible.builtin.copy:
@@ -28,19 +29,21 @@
     group: "root"
     mode: '0755'
   with_items: "{{fzf_additional_bins}}"
+  become: true
 
 - name: Download fzf tarball
   ansible.builtin.get_url:
-    url: https://github.com/junegunn/fzf/releases/download/0.45.0/fzf-0.45.0-linux_amd64.tar.gz
-    dest: /tmp/fzf-0.45.0-linux_amd64.tar.gz
+    url: "{{fzf_binary}}"
+    dest: /tmp/fzf.tar.gz
     mode: '0755'
 
 - name: Extract fzf tarball to /usr/local/bin
   ansible.builtin.unarchive:
-    src: "/tmp/fzf-0.45.0-linux_amd64.tar.gz"
+    src: "/tmp/fzf.tar.gz"
     dest: "{{fzf_bin_destination}}"
     owner: "root"
     group: "root"
     mode: '0755'
+  become: true
   
   

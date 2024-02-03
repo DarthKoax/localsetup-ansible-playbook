@@ -8,7 +8,7 @@
     tags: ['dotfiles']
   - role: darthkoax.installation
     tags: ['applications_installation']
-    become: yes
+    become: no
   - role: fubarhouse.golang
     tags: ['fubarhouse.golang']
     become: yes

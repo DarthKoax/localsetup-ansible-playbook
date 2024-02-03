@@ -7,6 +7,7 @@
 
 - name: Install in fzf for Airgapped env
   include_tasks: "fzf.yml"
+  when: install_fzf
 
 - name: Install in neovim for Airgapped env
   include_tasks: "neovim.yml"
