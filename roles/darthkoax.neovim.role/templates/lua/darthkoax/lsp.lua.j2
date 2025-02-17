@@ -1,0 +1,14 @@
+-- ~/.config/nvim/lua/darthkoax/lsp.lua
+local lspconfig = require('lspconfig')
+
+-- gopls setup
+require'lspconfig'.gopls.setup{
+    cmd = { "gopls", "serve" },
+}
+
+
+-- Example: Setup for another language (e.g., Python using pyright)
+lspconfig.pyright.setup{}
+
+
+require'lspconfig'.tsserver.setup{}

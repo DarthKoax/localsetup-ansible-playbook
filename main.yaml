@@ -1,22 +1,30 @@
----
-- name: Setup local development environment
+- name: "Setup local development environment"
   hosts: all
   gather_facts: yes
   connection: local
   roles:
   - role: geerlingguy.dotfiles
     tags: ['dotfiles']
-  - role: darthkoax.installation
+  - role: darthkoax.basic.installation
     tags: ['applications_installation']
+    become: no
+  - role: darthkoax.fzf.role
+    tags: ['fzf']
+    become: no
+  - role: darthkoax.neovim.role
+    tags: ['neovim']
+    become: no
+  - role: darthkoax.vscode.role
+    tags: ['vscode']
     become: no
   - role: fubarhouse.golang
     tags: ['fubarhouse.golang']
     become: yes
     when: deploy_golang
-  - role: darthkoax.container_runtime
-    tags: ['container_runtime']
-    become: yes
-    when: deploy_container_runtime
+  # - role: darthkoax.container_runtime.role
+  #   tags: ['container_runtime']
+  #   become: yes
+  #   when: deploy_container_runtime
 
   
   tasks:

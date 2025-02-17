@@ -1,0 +1,16 @@
+---
+#Set source repo where dependencies will be found
+vscode_version_hash: e170252f762678dec6ca2cc69aba1570769a5d39
+code_server_download_source: https://update.code.visualstudio.com/commit:{{vscode_version_hash}}/server-linux-x64/stable
+
+#Choose which roles to install
+install_vscode_server: true
+
+vscode_extension_repo_domain: https://marketplace.visualstudio.com/_apis/public/gallery/publishers
+
+vscode_extensions:
+  - name: jupyter
+    url: https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-toolsai/vsextensions/jupyter/2024.4.2024041702/vspackage?targetPlatform=linux-x64
+  - name: vscode-jupyter-cell-tags
+    url: https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-toolsai/vsextensions/vscode-jupyter-cell-tags/0.1.9/vspackage
+

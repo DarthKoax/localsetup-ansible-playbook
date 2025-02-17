@@ -10,5 +10,5 @@ ansible-galaxy install gantsign.golang
 
 ## Run me
 ```
-ansible-playbook -i inventory main.yaml --ask-become
+ansible-playbook -i inventory.ini main.yaml --ask-become
 ```

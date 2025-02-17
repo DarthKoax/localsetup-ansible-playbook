@@ -1,0 +1,95 @@
+---
+#Set source repo where dependencies will be found
+git_repo_source: https://github.com
+git_binary_source: https://github.com
+
+#Choose which roles to install
+install_fzf: true
+install_lsp: true
+
+# Neovim role dependencies
+neovim_appimage_url: "{{git_binary_source}}/neovim/neovim/releases/download/v0.9.5/"
+neovim_binary_name: nvim.appimage
+local_neovim_dir: ~/.local/share/nvim
+config_neovim_dir: ~/.config/nvim
+
+neovim_dependencies:
+  - fuse
+  - fuse-libs
+
+nvim_custom_project: darthkoax
+nvim_lazy_nvim_repo: "{{git_repo_source}}/folke/lazy.nvim.git"
+
+#NVIM config
+nvim_lazy_plugins_install: |
+  "{{git_repo_source}}/numToStr/Comment.nvim.git",
+  {
+    "{{git_repo_source}}/nvim-neo-tree/neo-tree.nvim.git",
+    branch = "v3.x",
+    dependencies = {
+      "{{git_repo_source}}/nvim-lua/plenary.nvim.git",
+      "{{git_repo_source}}/nvim-tree/nvim-web-devicons.git",
+      "{{git_repo_source}}/MunifTanjim/nui.nvim.git",
+    }
+  },
+  {
+    "{{git_repo_source}}/folke/which-key.nvim.git",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+  },
+  {
+    '{{git_repo_source}}/nvim-telescope/telescope.nvim.git', 
+    tag = '0.1.5',
+    dependencies = { 
+      '{{git_repo_source}}/nvim-lua/plenary.nvim.git' 
+    }
+  },
+  { 
+    '{{git_repo_source}}/catppuccin/nvim.git', 
+    name = "catppuccin", 
+    priority = 1000 
+  },
+  {
+    "{{git_repo_source}}/folke/noice.nvim.git",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "{{git_repo_source}}/MunifTanjim/nui.nvim.git",
+      -- OPTIONAL:
+      "{{git_repo_source}}/rcarriga/nvim-notify.git",
+    }
+  },
+  {
+    '{{git_repo_source}}/nvim-treesitter/nvim-treesitter.git', 
+  },
+  {
+    '{{git_repo_source}}/akinsho/bufferline.nvim.git', 
+    version = "*", 
+    dependencies = "{{git_repo_source}}/nvim-tree/nvim-web-devicons.git"
+  }, 
+  {
+    '{{git_repo_source}}/neovim/nvim-lspconfig.git',
+  },
+  {
+    '{{git_repo_source}}/hrsh7th/nvim-cmp.git', -- Autocompletion plugin
+    dependencies = {
+      '{{git_repo_source}}/hrsh7th/cmp-nvim-lsp.git', -- LSP source for nvim-cmp
+      '{{git_repo_source}}/hrsh7th/cmp-buffer.git', -- Buffer completions
+      '{{git_repo_source}}/hrsh7th/cmp-path.git', -- Path completions
+      '{{git_repo_source}}/hrsh7th/cmp-cmdline.git', -- Cmdline completions
+      '{{git_repo_source}}/saadparwaiz1/cmp_luasnip.git', -- Snippet completions
+      '{{git_repo_source}}/L3MON4D3/LuaSnip.git', -- Snippet Engine
+    },
+  },
+
+#LSP Server role dependencies
+golang_lsp_installer: golang.org/x/tools/gopls@latest
+node_version: v20.11.1
+nodejs_dist_source: https://nodejs.org/dist/{{node_version}}/node-{{node_version}}-linux-x64.tar.xz
+

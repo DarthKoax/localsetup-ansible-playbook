@@ -1,0 +1,9 @@
+---
+- name: Install in neovim for Airgapped env
+  include_tasks: "neovim.yml"
+  when: install_neovim
+
+- name: Install in lsp servers
+  include_tasks: "lsp_servers.yml"
+  when: install_lsp
+

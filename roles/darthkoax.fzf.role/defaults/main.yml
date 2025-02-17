@@ -1,0 +1,17 @@
+---
+#Set source repo where dependencies will be found
+git_repo_source: https://github.com
+git_binary_source: https://github.com
+
+#Choose which roles to install
+install_fzf: true
+
+#FZF role dependencies
+fzf_repo: "{{git_repo_source}}/junegunn/fzf.git"
+fzf_binary: "{{git_binary_source}}/junegunn/fzf/releases/download/0.45.0/fzf-0.45.0-linux_amd64.tar.gz"
+fzf_scripts:
+  - key-bindings.bash
+  - completion.bash
+fzf_additional_bins:
+  - fzf-tmux
+fzf_bin_destination: /usr/local/bin

@@ -1,0 +1,5 @@
+---
+- name: Install vscode server.
+  include_tasks: "vscode.yml"
+  when: install_vscode_server
+

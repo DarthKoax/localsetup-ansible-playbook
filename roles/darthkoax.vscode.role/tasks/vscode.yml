@@ -1,0 +1,62 @@
+---
+ 
+- name: "DEBUG"
+  debug:
+    msg: "{{vscode_extensions}}"
+  
+- name: "DEBUG"
+  debug:
+    msg: "{{vscode_extension_repo_domain}}/{{item.publisher}}/vsextensions/{{item.name}}/{{item.version}}/vspackage?targetPlatform={{item.platform}}"
+  with_items: "{{vscode_extensions}}"
+
+- name: "Git clone fzf"
+  git:
+    repo: "{{ fzf_repo }}"
+    dest: /tmp/fzf-git
+  become: false
+
+- name: make vscode dir
+  ansible.builtin.file:
+    path: ~/.vscode-server/bin/{{vscode_version_hash}}
+    state: directory
+    owner: "{{ansible_user_id}}"
+    mode: '0755'
+
+- name: Download vscode-server tarball
+  ansible.builtin.get_url:
+    url: "{{code_server_download_source}}"
+    dest: /tmp/vscode-server.tar.gz
+    mode: '0755'
+
+- name: "Extract vscode tarball to ~/.vscode-server/bin/{{vscode_version_hash}}"
+  ansible.builtin.unarchive:
+    src: "/tmp/vscode-server.tar.gz"
+    dest: "~/.vscode-server/bin/{{vscode_version_hash}}"
+    owner: "{{ansible_user_id}}"
+    extra_opts: ['--strip-components=1', '--show-stored-names']
+    mode: '0755'
+  become: true
+  
+    
+
+# - name: Copy fzf scripts to .config
+#   ansible.builtin.copy:
+#     src: /tmp/fzf-git/shell/{{item}}
+#     dest: ~/.config//fzf/{{item}}
+#     owner: "{{ansible_user_id}}"
+#     group: "{{ansible_user_id}}"
+#   with_items: "{{fzf_scripts}}"
+
+# - name: "Copy fzf-tmux to {{fzf_bin_destination}}"
+#   ansible.builtin.copy:
+#     src: /tmp/fzf-git/bin/{{item}}
+#     dest: "{{fzf_bin_destination}}"
+#     owner: "root"
+#     group: "root"
+#     mode: '0755'
+#   with_items: "{{fzf_additional_bins}}"
+#   become: true
+
+
+
+  

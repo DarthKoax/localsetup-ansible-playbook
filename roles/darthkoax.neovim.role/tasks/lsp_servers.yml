@@ -1,0 +1,115 @@
+---
+
+#GOLANG LSP
+- name: Ensure Go is installed
+  ansible.builtin.package:
+    name: golang
+    state: present
+
+- name: Install gopls
+  ansible.builtin.shell:
+    cmd: "go install {{golang_lsp_installer}}"
+  environment:
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"  # Default GOBIN location, adjust if your setup differs
+    GOPATH: "{{ ansible_env.HOME }}/go"  # Default GOPATH location, adjust if your setup differs
+
+- name: Set Python 3.11 as the chosen alternative
+  command: update-alternatives --set python /usr/bin/python3.11
+  when: ansible_os_family == "Debian" or ansible_os_family == "RedHat"
+
+- name: Verify Python version
+  command: python --version
+  register: python_version
+  changed_when: False
+
+- name: Download node tarball
+  ansible.builtin.get_url:
+    url:  "{{nodejs_dist_source}}"
+    dest: /tmp/node-{{node_version}}-linux-x64.tar.xz
+    mode: '0755'
+
+- name: Extract node tarball to /usr/local/bin
+  ansible.builtin.unarchive:
+    src: "/tmp/node-{{node_version}}-linux-x64.tar.xz"
+    dest: "/opt"
+    owner: "root"
+    group: "root"
+    mode: '0755'
+  become: true
+
+- name: Create a symlink to the target directory
+  ansible.builtin.file:
+    src: /opt/node-{{node_version}}-linux-x64/bin/node
+    dest: /usr/local/bin/node
+    state: link
+    force: yes
+
+- name: Create a symlink to the target directory
+  ansible.builtin.file:
+    src: /opt/node-{{node_version}}-linux-x64/bin/npm
+    dest: /usr/local/bin/npm
+    state: link
+    force: yes
+
+- name: Create a symlink to the target directory
+  ansible.builtin.file:
+    src: /opt/node-{{node_version}}-linux-x64/bin/corepack
+    dest: /usr/local/bin/corepack
+    state: link
+    force: yes
+   
+- name: Create a symlink to the target directory
+  ansible.builtin.file:
+    src: /opt/nnpode-{{node_version}}-linux-x64/bin/npx
+    dest: /usr/local/bin/npx
+    state: link
+    force: yes
+   
+# Install Pyright globally using npm
+- name: Install Pyright globally with npm
+  ansible.builtin.command:
+    cmd: npm install -g pyright
+  args:
+    creates: /usr/bin/pyright 
+
+- name: Install TypeScript Language Server
+  ansible.builtin.command:
+    cmd: npm install -g typescript-language-server
+  args:
+    creates: /usr/local/bin/typescript-language-server 
+
+- name: Install TypeScript
+  ansible.builtin.command:
+    cmd: npm install -g typescript
+  args:
+    creates: /usr/local/bin/typescript
+  
+- name: Install ESLint
+  ansible.builtin.command:
+    cmd: npm install -g eslint
+  args:
+    creates: /usr/local/bin/eslint
+
+# ## Python LSP
+# - name: Ensure Python is installed
+#   ansible.builtin.package:
+#     name: python3.11
+#     state: present
+# - name: Ensure Python is installed
+#   ansible.builtin.package:
+#     name: python3.11-pip-wheel
+#     state: present
+
+# - name: Install pylsp using pip
+#   ansible.builtin.pip:
+#     name: python-lsp-server
+#     state: latest
+
+# - name: Install pylsp plugins using pip
+#   ansible.builtin.pip:
+#     name:
+#       - pylsp-mypy
+#       - pylsp-flake8
+#       - pylsp-pydocstyle
+#       - pylsp-rope
+#     state: latest
